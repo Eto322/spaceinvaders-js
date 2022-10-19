@@ -18,9 +18,9 @@ const keys = {
 // Player model logic
 class Player {
   constructor() {
-    this.position = { x: 0, y: 0 };
-    this.velocity = { x: 0, y: 0 };
    
+    this.velocity = { x: 0, y: 0 };
+    this.position = { x: 0, y: 0 };
 
     const image = new Image();
     image.src = "./images/player_ship.png";
@@ -56,7 +56,47 @@ class Shoot{
     }
 }
 
+
+
+class Enemy {
+  constructor() {
+    this.position = { x: 0, y: 0 };
+    this.velocity = { x: 0, y: 0 };
+   
+
+    const image = new Image();
+    image.src = "./images/enemy_ship.png";
+    image.onload = () => {
+      this.image = image;
+      this.width = image.width;
+      this.height = image.height;
+      this.position.x = canvas.width / 2 - this.width / 2;
+      this.position.y = canvas.height/2
+    };
+  }
+
+  update() {
+    if (this.image) {
+      this.draw();
+      this.position.x += this.velocity.x;
+      this.position.y += this.velocity.y;
+    }
+  }
+
+  draw() {
+    ctx.drawImage(
+      this.image,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+  }
+}
+
+
 const player = new Player();
+const enemy = new Enemy();
 
 //game loop
 function gameLoop() {
@@ -64,6 +104,7 @@ function gameLoop() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
+  enemy.update();
 
   if (keys.ArrowRight.isDown&&player.position.x+player.width<=canvas.width) {
     player.velocity.x = 5;
